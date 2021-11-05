@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, serializers, status
 
 from rest_framework.views import APIView
@@ -19,6 +20,7 @@ class RoomView(generics.CreateAPIView):
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
 
+    @csrf_exempt
     def post(self, request, format=None):
         # Checking if current user has an active session with server
         if not self.request.session.exists(self.request.session.session_key):
@@ -42,5 +44,6 @@ class CreateRoomView(APIView):
             else:
                 room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
                 room.save()
+                return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
-        return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+        return Response({'Bad Request': 'Invalid data..'}, status=status.HTTP_400_BAD_REQUEST)
