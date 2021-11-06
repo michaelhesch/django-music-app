@@ -10,6 +10,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
+
 export default class CreateRoomPage extends Component {
   defaultVotes = 2;
 
@@ -21,9 +22,9 @@ export default class CreateRoomPage extends Component {
       votesToSkip: this.defaultVotes,
     };
     // bind methods to the class, so that we have access to 'this' keyword
+    this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
-    this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
   }
 
   // e denotes object that called this function, should be text field in this case
@@ -36,7 +37,7 @@ export default class CreateRoomPage extends Component {
   handleGuestCanPauseChange(e) {
     this.setState({
       // if the value is true, set this to true, else make it false
-      guestCanPause: e.target.value === 'true' ? true : false,
+      guestCanPause: e.target.value === "true" ? true : false,
     });
   }
 
@@ -44,7 +45,9 @@ export default class CreateRoomPage extends Component {
   handleRoomButtonPressed() {
     const requestOptions = {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         votes_to_skip: this.state.votesToSkip,
         guest_can_pause: this.state.guestCanPause,
@@ -53,10 +56,8 @@ export default class CreateRoomPage extends Component {
     // After we get the response, convert to json object
     fetch("/api/create-room", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data)
-    );
+      .then((data) => this.props.history.push("/room/" + data.code));
   }
-
 
   render() {
     return (
