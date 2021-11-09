@@ -21,7 +21,7 @@ export default class CreateRoomPage extends Component {
       guestCanPause: true,
       votesToSkip: this.defaultVotes,
     };
-    // bind methods to the class, so that we have access to 'this' keyword
+    // Bind methods to the class, so that we have access to 'this' keyword
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
