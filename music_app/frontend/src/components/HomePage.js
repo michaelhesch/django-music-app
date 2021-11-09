@@ -17,6 +17,7 @@ export default class HomePage extends Component {
     this.state = {
       roomCode: null,
     };
+    this.clearRoomCode = this.clearRoomCode.bind(this);
   }
 
   // Lifecycle method to hook into react component
@@ -54,6 +55,14 @@ export default class HomePage extends Component {
     );
   }
 
+  // Resets the state to clear the room code
+  // Prevents room code that no longer exists from being left in state
+  clearRoomCode() {
+    this.setState({
+      roomCode: null,
+    });
+  }
+
   render() {
     return (
       <Router>
@@ -63,7 +72,12 @@ export default class HomePage extends Component {
           }} />
           <Route path="/join" component={RoomJoinPage} />
           <Route path="/create" component={CreateRoomPage} />
-          <Route path="/room/:roomCode" component={Room} />
+          <Route
+            path="/room/:roomCode"
+            render={(props) => {
+              return <Room {...props} leaveRoomCallback={this.clearRoomCode} />;
+            }}
+          />
         </Switch>
       </Router>
     );
